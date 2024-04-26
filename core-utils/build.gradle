@@ -1,0 +1,107 @@
+plugins {
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.klapcomercio.core_utils'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        compose true
+        viewBinding = true
+    }
+}
+
+
+/**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+
+def getVersionName = { ->
+    return "1.0.0" // Replace with version Name
+}
+
+def getArtificatId = { ->
+    return "core_utils" // Replace with library name ID
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.klapcomercio'
+            artifactId getArtificatId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            /** Configure path of your package repository on Github
+             *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
+             */
+            url = uri("https://maven.pkg.github.com/GITHUB_USERID/REPOSITORY")
+
+            credentials {
+                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+
+//    Network
+    api libs.retrofit
+    api libs.retrofitConverterGson
+    implementation libs.retrofitConverterScalar
+    api libs.gson
+    implementation libs.okhttp
+    implementation libs.okttpInterceptor
+
+    implementation libs.securityCryptoKtx
+    implementation libs.preferenceKtx
+    implementation libs.room
+    annotationProcessor libs.roomCompiler
+
+
+    implementation libs.androidLifecycleRuntimeKtx
+    implementation libs.composeRuntimeLivedata
+    implementation libs.composeLifecycleViewmodel
+    implementation libs.timber
+    implementation libs.retrofit
+}
