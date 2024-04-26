@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="generic_service_error">Ups! Something went wrong. Please try again later</string>
+    <string name="no_internet_error">Your internet connection is not stable. Please check this</string>
+    <string name="session_expired_error">Your session has expired. Please login again</string>
+    <string name="wrong_credentials_error">Wrong email or password. Please try again.</string>
+</resources>

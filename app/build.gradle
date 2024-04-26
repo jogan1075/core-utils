@@ -3,6 +3,13 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
+/**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+def githubPropertiesFile = rootProject.file("github.properties");
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(githubPropertiesFile))
+
+
+
 android {
     namespace 'com.klapcomercio.core_utils'
     compileSdk 34
@@ -44,6 +51,25 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+ /*   *//****GitHubPackages Path and credentials***//*
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            *//*  Configure path to the library hosted on GitHub Packages Registry
+             *  Replace UserID with package owner userID and REPOSITORY with the repository name
+             *  e.g. "https://maven.pkg.github.com/enefce/AndroidLibraryForGitHubPackagesDemo"
+             *//*
+            //url = uri("https://maven.pkg.github.com/UserID/REPOSITORY")
+            url = uri("https://maven.pkg.github.com/enefce/AndroidLibraryForGitHubPackagesDemo")
+
+            credentials {
+                *//**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key =PERSONAL_ACCESS_TOKEN**//*
+                username = System.getenv("GPR_USER") ?: githubProperties['gpr.usr']
+                password = System.getenv("GPR_API_KEY") ?: githubProperties['gpr.key']
+            }
+        }
+    }*/
 }
 
 dependencies {
