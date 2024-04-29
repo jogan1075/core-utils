@@ -26,7 +26,7 @@ open class MvvmViewModel : ViewModel() {
     val error: LiveData<Throwable> get() = _error
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Timber.tag(COROUTINE_EXCEPTION_HANDLER_MESSAGE).e(exception)
+        Timber.tag(COROUTINE_EXCEPTION_HANDLER_MESSAGE).e(exception.toString())
     }
 
     protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit) {

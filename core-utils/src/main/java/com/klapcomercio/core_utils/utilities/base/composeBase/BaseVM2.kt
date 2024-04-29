@@ -26,7 +26,7 @@ abstract class BaseVM2<Event, UiState> : ViewModel() {
     }
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Timber.tag(MvvmViewModel.COROUTINE_EXCEPTION_HANDLER_MESSAGE).e(exception)
+        Timber.tag(MvvmViewModel.COROUTINE_EXCEPTION_HANDLER_MESSAGE).e(exception.toString())
     }
 
     companion object {
