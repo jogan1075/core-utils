@@ -54,7 +54,7 @@ def getArtificatId = { ->
 
 publishing {
     publications {
-        bar(MavenPublication) {
+        aar(MavenPublication) {
             groupId 'com.klapcomercio'
             artifactId getArtificatId()
             version getVersionName()
