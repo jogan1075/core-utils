@@ -53,4 +53,5 @@ securityCryptoKtx = "androidx.security:security-crypto-ktx:1.1.0-alpha03"
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-mavenPublish = { id= 'maven-publish'}
+
+
