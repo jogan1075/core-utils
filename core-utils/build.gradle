@@ -33,6 +33,9 @@ android {
         compose true
         viewBinding = true
     }
+    lintOptions {
+        disable 'LogNotTimber', 'StringFormatInTimber', 'ThrowableNotAtBeginning', 'BinaryOperationInTimber', 'TimberArgCount', 'TimberArgTypes', 'TimberTagLength'
+    }
 }
 
 
