@@ -36,6 +36,9 @@ android {
     lintOptions {
         disable 'LogNotTimber', 'StringFormatInTimber', 'ThrowableNotAtBeginning', 'BinaryOperationInTimber', 'TimberArgCount', 'TimberArgTypes', 'TimberTagLength'
     }
+    publishing {
+        singleVariant('release')
+    }
 }
 
 
@@ -52,6 +55,37 @@ def getArtificatId = { ->
     return "core_utils" // Replace with library name ID
 }
 
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId 'com.klapcomercio'
+                artifactId getArtificatId()
+                version getVersionName()
+                artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+            }
+        }
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                /** Configure path of your package repository on Github
+                 *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
+                 */
+                url = uri("https://maven.pkg.github.com/GITHUB_USERID/REPOSITORY")
+
+                credentials {
+                    /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+                    username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                    password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+                }
+            }
+        }
+    }
+}
+
 publishing {
     publications {
         aar(MavenPublication) {
@@ -62,21 +96,32 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            /** Configure path of your package repository on Github
-             *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
-             */
-            url = uri("https://maven.pkg.github.com/GITHUB_USERID/REPOSITORY")
+//    pom.withXml {
+//        def dependenciesNode = asNode().appendNode('dependencies')
+//        //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+//        configurations.implementation.allDependencies.each {
+//            def dependencyNode = dependenciesNode.appendNode('dependency')
+//            dependencyNode.appendNode('groupId', it.group)
+//            dependencyNode.appendNode('artifactId', it.name)
+//            dependencyNode.appendNode('version', it.version)
+//        }
+//    }
 
-            credentials {
-                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
-        }
-    }
+//    repositories {
+//        maven {
+//            name = "GitHubPackages"
+//            /** Configure path of your package repository on Github
+//             *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
+//             */
+//            url = uri("https://maven.pkg.github.com/GITHUB_USERID/REPOSITORY")
+//
+//            credentials {
+//                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+//                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+//                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+//            }
+//        }
+//    }
 }
 
 dependencies {
